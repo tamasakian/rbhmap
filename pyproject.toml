@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "g2bp"
+version = "0.0.0"
+description = "RBHMAP: A Reciprocal Best Hit Mapping Tool."
+dependencies = []
+requires-python = ">=3.8"
+authors = [
+    {name = "tamasakian", email = "tamasakian@gmail.com"}
+]
+readme = "README.md"
