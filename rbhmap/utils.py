@@ -117,7 +117,7 @@ def write_map_file(map_file: str, rbh_pairs: set) -> None:
     for rbh1, rbh2 in rbh_pairs:
         rbh1_prefix, rbh1_suffix = rbh1.split("_", 1)
         rbh2_prefix, rbh2_suffix = rbh2.split("_", 1)
-        if rbh1_prefix > rbh2_prefix:
+        if rbh1_prefix < rbh2_prefix:
             ordered_pairs.append((rbh1_suffix, rbh2_suffix))
         else:
             ordered_pairs.append((rbh2_suffix, rbh1_suffix))
