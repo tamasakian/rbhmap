@@ -17,6 +17,6 @@ def blast(blast_file: str, map_file:str) -> None:
         blast_file: Path to the input BLAST file.
         map_file:   Path to the output TSV file containing RBH pairs.
     """
-    blast_results = utils.parse_blast_file(blast_file)
+    blast_results = utils.parse_blast_file(blast_file=blast_file)
     rbh_pairs = utils.extract_rbh_pairs(results=blast_results)
     utils.write_map_file(map_file=map_file, rbh_pairs=rbh_pairs)
