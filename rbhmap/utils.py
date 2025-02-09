@@ -68,6 +68,7 @@ def extract_rbh_pairs(results: list) -> set:
     for qseqid, sseqids in reciprocal_best_hits.items():
         for sseqid in sseqids:
             rbh_pairs.add(tuple(sorted([qseqid, sseqid])))
+    return rbh_pairs
 
 
 def load_prefix(rbh_pairs: set) -> list:
@@ -86,12 +87,12 @@ def load_prefix(rbh_pairs: set) -> list:
         rbh2_prefix = rbh2.split("_")[0]
         prefixes.append(rbh1_prefix)
         prefixes.append(rbh2_prefix)
-    if len(prefixes) != 2:
-        sys.stderr.write("Warning: Expected exactly 2 unique prefixes.\n")
-        return
 
     unique_prefixes = set(prefixes)
     sorted_prefixes = sorted(unique_prefixes)
+    if len(sorted_prefixes) != 2:
+        sys.stderr.write("Warning: Expected exactly 2 unique prefixes.\n")
+        return
     return sorted_prefixes
 
 
