@@ -9,7 +9,7 @@ Functions:
     blast: Map the Reciprocal Best Hit (RBH) from BLAST results.
 """
 
-def blast(blast_file: str, map_file:str) -> None:
+def blast(blast_file: str, map_file: str) -> None:
     """
     Map the Reciprocal Best Hit (RBH) from BLAST results.
 
