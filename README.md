@@ -3,7 +3,7 @@
 **RBHMAP**: A Reciprocal Best Hit Mapping Tool.
 
 ## Version
-Current version: `v1.0.0`
+Current version: `v1.1.0`
 
 ## Install
 
@@ -23,6 +23,12 @@ Create a gene mapping file using all-to-all BLAST results.
 
 ```
 python3 -m rbhmap blast [BLAST filename] [MAP filename]
+```
+
+Split a gene mapping file into foreground and background RBH pairs.
+
+```
+python3 -m rbhmap map2split [MAP filename] [seq filename] [output basename]
 ```
 
 
