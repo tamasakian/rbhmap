@@ -11,6 +11,9 @@ Functions:
     extract_rbh_pairs: Extract reciprocal best hits (RBH) from BLAST results.
     load_prefix: Load and sort unique prefixes from the RBH pairs.
     write_map_file: Write the reciprocal best hit (RBH) pairs to map_file.
+    parse_seq_file: Parse seq_file to generate a set of Sequence IDs.
+    split_pairs: Parse map_file and split mapping RBH pairs.
+    write_map2split_files: Write two foreground and background RBH pairs to output_file.
 """
 
 def parse_blast_file(blast_file: str) -> list:
@@ -127,4 +130,68 @@ def write_map_file(map_file: str, rbh_pairs: set) -> None:
         map_handle.write(f"#\t{"\t".join(ordered_prefixes)}\n")
         for ordered_pair in ordered_pairs:
             map_handle.write(f"{"\t".join(ordered_pair)}\n")
+
+def parse_seq_file(seq_file: str) -> set:
+    """
+    Parse seq_file to generate a set of Sequence IDs.
+
+    Args:
+        seq_file:
+            Path to the input text file.
+
+    Returns:
+        set: A set of Sequence IDs parsed from seq_file.
+    """
+    seqs = set()
+    with open(seq_file, "r") as seq_handle:
+        for line in seq_handle:
+            if line.startswith("#"):
+                continue
+            seq_name = line.strip()
+            seqs.add(seq_name)
+    return seqs
+
+def split_pairs(map_file: str, seqs: set) -> list:
+    """
+    Parse map_file and split mapping RBH pairs.
+
+    Args:
+        map_file:
+            Path to the input TSV file containing RBH pairs.
+        seqs:
+            A set of Sequence IDs.
+
+    Returns:
+        Two list included foreground RBH pairs and background RBH pairs.
+    """
+    foreground = []
+    background = []
+    with open(map_file, "r") as map_handle:
+        for line in map_handle:
+            if line.startswith("#"):
+                continue
+            pairs = line.strip()
+            pair1, pair2 = pairs.split("\t")
+            if pair1 in seqs or pair2 in seqs:
+                foreground.append(pairs)
+            else:
+                background.append(pairs)
+    return foreground, background
+
+def write_map2split_files(output_basename: str, foreground_list: list, background_list: list) -> None:
+    """
+    Write two foreground and background RBH pairs to output_file.
+
+    Args:
+        output_basename:
+            Path to the output TSV files without extension.
+        foreground_list:
+            A list of foreground RBH pairs.
+        background_list:
+            A list of background RBH pairs.
+    """
+    for group, items in zip(["foreground", "background"], [foreground_list, background_list]):
+        output_file = f"{output_basename}_{group}.txt"
+        with open(output_file, "w") as output_handle:
+            output_handle.write("\n".join(items) + "\n")
 
