@@ -7,6 +7,7 @@ Function Library for RBHMAP.
 
 Functions:
     blast: Map the Reciprocal Best Hit (RBH) from BLAST results.
+    map2split: Split a map file into foreground and background RBH pairs based a seq_file.
 """
 
 def blast(blast_file: str, map_file: str) -> None:
