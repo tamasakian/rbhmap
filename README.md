@@ -3,7 +3,7 @@
 **RBHMAP**: A Reciprocal Best Hit Mapping Tool.
 
 ## Version
-Current version: `v1.1.0`
+Current version: `v1.2.0`
 
 ## Install
 
