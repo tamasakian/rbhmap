@@ -195,3 +195,51 @@ def write_map2split_files(output_basename: str, foreground_list: list, backgroun
         with open(output_file, "w") as output_handle:
             output_handle.write("\n".join(items) + "\n")
 
+def parse_map_file(map_file: str) -> list:
+    pairs = []
+    with open(map_file, "r") as map_handle:
+        for line in map_handle:
+            if line.startswith("#"):
+                continue
+            parts = line.strip().split("\t")
+            pair1, pair2 = parts[0], parts[1]
+            pairs.append((pair1, pair2))
+    return pairs
+
+def parse_colin_file(colin_file: str) -> dict:
+    results = {}
+    with open(colin_file, "r") as colin_handle:
+        align_id = None
+        for line in colin_handle:
+            line = line.strip()
+            if line.startswith("## Alignment"):
+                parts = line.split(":")
+                align_id = int(parts[0].split()[2])
+                li = parts[1].split()
+                if len(li) != 5:
+                    continue
+                score, e_value, n_part, seq_part, plusminus = li
+                n_value = int(n_part.split("=")[1])
+                seq_names = seq_part.split("&")
+                if align_id not in results:
+                    results[align_id] = (seq_names, n_value, [])
+                    print(align_id, seq_names, n_value)
+
+            if line and not line.startswith("#"):
+                parts = line.split()
+                if len(parts) >= 3:
+                    align_id = int(parts[0].split("-")[0])
+                    gene1, gene2 = parts[2:4]
+                    if align_id in results:
+                        results[align_id][2].append((gene1, gene2))
+                        print(align_id, gene1, gene2)
+    return results
+
+def write_map2colin_file(pairs: list, results: dict, output_file: str) -> None:
+    pairs_set = {frozenset(pair) for pair in pairs}
+    with open(output_file, "w") as output_handle:
+        for align_id, (seq_names, n_value, gene_pairs) in results.items():
+            rbh_pairs = [pair for pair in gene_pairs if frozenset(pair) in pairs_set]
+            output_handle.write(f"##\t{align_id}\t{seq_names[0]}\t{seq_names[1]}\t{n_value}\t{len(rbh_pairs)}\n")
+            for gene1, gene2 in rbh_pairs:
+                output_handle.write(f"{align_id}\t{gene1}\t{gene2}\n")
