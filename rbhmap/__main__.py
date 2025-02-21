@@ -23,7 +23,8 @@ def parse_args():
 
 functions = {
     "blast": functions.blast,
-    "map2split": functions.map2split
+    "map2split": functions.map2split,
+    "map2colin": functions.map2colin
 }
 
 if __name__ == "__main__":
