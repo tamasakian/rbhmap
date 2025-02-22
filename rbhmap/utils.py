@@ -223,7 +223,6 @@ def parse_colin_file(colin_file: str) -> dict:
                 seq_names = seq_part.split("&")
                 if align_id not in results:
                     results[align_id] = (seq_names, n_value, [])
-                    print(align_id, seq_names, n_value)
 
             if line and not line.startswith("#"):
                 parts = line.split()
@@ -232,7 +231,6 @@ def parse_colin_file(colin_file: str) -> dict:
                     gene1, gene2 = parts[2:4]
                     if align_id in results:
                         results[align_id][2].append((gene1, gene2))
-                        print(align_id, gene1, gene2)
     return results
 
 def write_map2colin_file(pairs: list, results: dict, output_file: str) -> None:
